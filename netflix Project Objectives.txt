@@ -1,0 +1,16 @@
+In this project I looked at the following KPIs to find insight on the distribution of subscription to netflix by
+Userbase, by device, by gender, by country, by age group and total revenue generated from each KPI
+
+1. Total Subscription
+2. Subscription by country
+3a. Subscription by gender
+3b. Subscription by gender percentage
+4. Subscription by age
+5. Subscription by device
+6. Subscription by Plan
+7. Sum of Monthly Revenue by Device (SMRD)
+8. Sum of Monthly Revenue by Country (SMRC)
+9. Sum of Monthly Revenue by Country and Gender (SMRCG)
+10. Sum of Monthly Revenue by Country, Age, and Gender (SMRCAG)
+11.Sum of Monthly Revenue by Subscription Type (SMRST)
+12. Total Revenue

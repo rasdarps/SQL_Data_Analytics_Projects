@@ -1,0 +1,91 @@
+/*This project involve */
+
+CREATE DATABASE netflix_db
+--Data Profile
+SELECT * FROM netflix_tbl
+
+-- 1. Total Subscription
+SELECT COUNT(User_id) AS 'Total Subscription' FROM netflix_tbl;
+
+--2. Subscription by country
+SELECT Country, COUNT(User_id) AS 'Total Subscription by country' FROM netflix_tbl
+GROUP BY Country 
+ORDER BY 'Total Subscription by country' DESC;
+
+--3. Subscription by gender
+SELECT Gender, COUNT(User_id) AS 'Total Subscription by gender' FROM netflix_tbl
+GROUP BY Gender 
+ORDER BY 'Total Subscription by gender' DESC;
+
+--3b. Subscription by gender percentage
+SELECT Gender,
+       (COUNT(User_id) * 100.0 / (SELECT COUNT(User_id) FROM netflix_tbl)) AS 'Percentage'
+FROM netflix_tbl
+GROUP BY Gender
+ORDER BY 'Percentage' DESC;
+
+--4. Subscription by age
+SELECT 
+case
+   when Age < 18 then 'Under 18'
+   when Age between 18 and 36 then '18-35'
+   when Age > 35 then 'Above 35 '
+ END as Age_range, 
+SUM(Age) AS 'Total Subscription by Age' FROM netflix_tbl
+GROUP BY Age
+ORDER BY 'Total Subscription by Age' DESC;
+
+--5. Subscription by device
+SELECT Device, COUNT(USER_ID) AS 'Subscription by Device' FROM netflix_tbl
+GROUP BY Device
+ORDER BY COUNT(User_ID) DESC;
+
+--6. Subscription by Plan
+SELECT Subscription_Type, COUNT(USER_ID) AS 'Subscription by Device' FROM netflix_tbl
+GROUP BY Subscription_Type
+ORDER BY COUNT(User_ID) DESC;
+
+--7. Sum of Monthly Revenue by Device (SMRD)
+SELECT Device, SUM(Monthly_Revenue) AS 'Revenue by Device' FROM netflix_tbl
+GROUP BY Device
+ORDER BY SUM(Monthly_Revenue) DESC;
+
+--8. Sum of Monthly Revenue by Country (SMRC)
+SELECT Country, SUM(Monthly_Revenue) AS 'Revenue by Country' FROM netflix_tbl
+GROUP BY Country
+ORDER BY SUM(Monthly_Revenue) DESC;
+
+--9. Sum of Monthly Revenue by Country and Gender (SMRCG)
+SELECT Country, Gender, SUM(Monthly_Revenue) AS 'Revenue by Country_Gender' FROM netflix_tbl
+GROUP BY Country, Gender
+ORDER BY Country, SUM(Monthly_Revenue) DESC;
+
+--10. Sum of Monthly Revenue by Country, Age, and Gender (SMRCAG)
+SELECT Country,
+       Age_Bin,
+       Gender,
+       SUM(Monthly_Revenue) AS 'Revenue by Country_AgeBin_Gender'
+FROM (
+    SELECT Country,
+           CASE
+               WHEN Age >= 26 AND Age <= 35 THEN '26-35'
+               WHEN Age > 35 AND Age <= 45 THEN '36-45'
+               WHEN Age > 45 AND Age <= 51 THEN '46-51'
+               ELSE 'Other'
+           END AS Age_Bin,
+           Gender,
+           Monthly_Revenue
+    FROM netflix_tbl
+    WHERE Age >= 26 AND Age <= 51
+) AS Subquery
+GROUP BY Country, Age_Bin, Gender
+ORDER BY Country, Age_Bin, SUM(Monthly_Revenue) DESC;
+
+--11.Sum of Monthly Revenue by Subscription Type (SMRST)
+SELECT Subscription_Type, SUM(Monthly_Revenue) AS 'Revenue by Subscription Type' FROM netflix_tbl
+GROUP BY Subscription_Type
+ORDER BY SUM(Monthly_Revenue) DESC;
+
+--12. Total Revenue
+SELECT SUM(Monthly_Revenue) AS 'Total Revenue'
+FROM netflix_tbl;
